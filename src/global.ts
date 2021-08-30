@@ -12,7 +12,7 @@ const argvs = parseArgs(process.argv);
 
 export const context: types.globalContext = {
 	affinity: buildSpAffinityUrl(),
-	spParam: decodeBase64(process.env.SP_PARAM),
+	spParam: decodeBase64(process.env.SP_PARAM).replace(/'/g, ''),
 	cpParamsLanguage: argvs.language,
 	cpLanguageCmd: getLanguageCmd(argvs),
 	cpParamsWorkDir:
