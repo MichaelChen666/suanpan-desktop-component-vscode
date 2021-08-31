@@ -49,8 +49,8 @@ app.get('/', (req, resp) => {
 		console.log(`app listening at http://${addrInfo.address}:${addrInfo.port}`);
 		try {
 			await port.registerPortWithRetry(freeport);
-			console.log(`register port success.`);
-			logger.Instance.info(`register port success.`);
+			console.log(`register port success. port: ${freeport}`);
+			logger.Instance.info(`register port success. port: ${freeport}`);
 			// 启动用户组件程序
 			if (global.context.runMode !== 'debug') {
 				run.startUserCode();
