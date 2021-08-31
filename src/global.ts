@@ -15,9 +15,9 @@ export const context: types.globalContext = {
 	spParam: decodeBase64(process.env.SP_PARAM).replace(/'/g, ''),
 	cpParamsLanguage: argvs.language,
 	cpLanguageCmd: getLanguageCmd(argvs),
-	cpParamsWorkDir:
-		argvs.workDir ||
-		path.join(argvs['storage-minio-global-store'], argvs.language), // 如果是空的，默认为节点的工作路径下
+	cpParamsWorkDir: path.isAbsolute(argvs.workDir)
+		? argvs.workDir
+		: path.join(argvs['storage-minio-global-store'], argvs.language), // 非绝对路径，则默认为节点的工作路径下
 	cpParamsEntry: getLanguageEntry(argvs),
 	userCodePid: null,
 	isFirstKill: true,
