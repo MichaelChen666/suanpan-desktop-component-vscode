@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 app.use(bodyParser.json({ limit: '20mb' }));
 
 console.log('\n#######################################\n');
+console.log(`vscode工作路径: ${process.cwd()}`);
 console.log(`算盘后端 url：${global.context.affinity}`);
 console.log(`算盘参数：${global.context.spParam}`);
 console.log(`工作路径：${global.context.cpParamsWorkDir}`);
@@ -26,6 +27,7 @@ console.log('\n#######################################\n');
 // });
 
 logger.Instance.info('\n#######################################\n');
+logger.Instance.info(`vscode工作路径: ${process.cwd()}`);
 logger.Instance.info(`算盘后端 url：${global.context.affinity}`);
 logger.Instance.info(`算盘参数：${global.context.spParam}`);
 logger.Instance.info(`工作路径：${global.context.cpParamsWorkDir}`);
@@ -49,17 +51,18 @@ app.get('/', (req, resp) => {
 		console.log(`app listening at http://${addrInfo.address}:${addrInfo.port}`);
 		try {
 			await port.registerPortWithRetry(freeport);
-			console.log(`register port success. port: ${freeport}`);
-			logger.Instance.info(`register port success. port: ${freeport}`);
-			// 启动用户组件程序
-			if (global.context.runMode !== 'debug') {
-				run.startUserCode();
-			}
 		} catch (err) {
 			console.error(`register port failed, err: ${err}`);
 			logger.Instance.info(`register port failed, err: ${err}`);
 
 			process.exit(1);
+		}
+
+		console.log(`register port success. port: ${freeport}`);
+		logger.Instance.info(`register port success. port: ${freeport}`);
+		// 启动用户组件程序
+		if (global.context.runMode !== 'edit') {
+			run.startUserCode();
 		}
 	});
 

@@ -25,6 +25,7 @@ export type vscodeLaunchAttributes = {
 	processId?: string;
 	args?: Array<string>;
 	env?: { [index: string]: string };
+	gevent?: boolean;
 };
 
 export type vscodeLaunch = {

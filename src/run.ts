@@ -1,6 +1,7 @@
 import { ChildProcess, spawn } from 'child_process';
 import * as global from './global';
 import logger from './eventlogger/eventlogger';
+import { getSpArgsArrary } from './common';
 
 export function init(app) {
 	// app.get('/usercode/run', (req, resp) => {
@@ -35,7 +36,9 @@ export function init(app) {
 export function startUserCode() {
 	const child: ChildProcess = spawn(
 		global.context.cpLanguageCmd,
-		[`${global.context.cpParamsEntry}`].concat(global.context.spParam),
+		[`${global.context.cpParamsEntry}`].concat(
+			getSpArgsArrary(global.context.spParam),
+		),
 		{
 			cwd: global.context.cpParamsWorkDir,
 			detached: false,
@@ -52,12 +55,12 @@ export function startUserCode() {
 				`启动用户组件程序失败, err: ${err}, 运行模式[${global.context.runMode}]`,
 			);
 
-			if (global.context.runMode !== 'debug') {
+			if (global.context.runMode !== 'edit') {
 				process.exit(1);
 			}
 		})
 		.on('close', (code) => {
-			if (global.context.runMode !== 'debug' && !global.context.isDebugKill) {
+			if (global.context.runMode !== 'edit' && !global.context.isDebugKill) {
 				console.error(
 					`用户组件程序关闭, 退出码（code: ${code}）, 运行模式[${global.context.runMode}]`,
 				);

@@ -2,7 +2,7 @@ import { ChildProcess, spawn } from 'child_process';
 import { vscodeLaunch } from './types';
 import path from 'path';
 import * as global from './global';
-import { killProcess } from './common';
+import { killProcess, getSpArgsArrary } from './common';
 import logger from './eventlogger/eventlogger';
 const fse = require('fs-extra');
 
@@ -92,7 +92,11 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 					{
 						name: `sp-debug-${global.context.cpLanguageCmd}-launch`,
 						type: 'node',
-						skipFiles: ['<node_internals>/**'],
+						skipFiles: [
+							'<node_internals>/**',
+							// eslint-disable-next-line no-template-curly-in-string
+							'${workspaceFolder}/node_modules/**/*.js',
+						],
 						request: 'launch',
 					},
 				],
@@ -106,9 +110,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 			} else {
 				launch.configurations[0].program = global.context.cpParamsEntry;
 				launch.configurations[0].env = process.env;
-				launch.configurations[0].args = global.context.spParam
-					.trim()
-					.split(' ');
+				launch.configurations[0].args = getSpArgsArrary(global.context.spParam);
 			}
 
 			return launch;
@@ -122,6 +124,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 						name: `sp-debug-${global.context.cpLanguageCmd}-launch`,
 						type: 'python',
 						request: 'launch',
+						gevent: true,
 					},
 				],
 			};
@@ -133,9 +136,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 			} else {
 				launch.configurations[0].program = global.context.cpParamsEntry;
 				launch.configurations[0].env = process.env;
-				launch.configurations[0].args = global.context.spParam
-					.trim()
-					.split(' ');
+				launch.configurations[0].args = getSpArgsArrary(global.context.spParam);
 			}
 
 			return launch;

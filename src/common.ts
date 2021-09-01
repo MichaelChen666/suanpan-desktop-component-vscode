@@ -76,3 +76,10 @@ export function killProcess(pid: number) {
 		logger.Instance.error(`kill process(pid=${pid}) err: ${e.message}`);
 	}
 }
+
+export function getSpArgsArrary(spParams: string): Array<string> {
+	return spParams
+		.trim()
+		.split(/\s+/)
+		.map((arg) => arg.trim().replace(/'/g, ''));
+}

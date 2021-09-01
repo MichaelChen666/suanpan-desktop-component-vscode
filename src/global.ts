@@ -1,5 +1,5 @@
-import path from 'path';
 import parseArgs from 'minimist';
+import path from 'path';
 import {
 	buildSpAffinityUrl,
 	getLanguageCmd,
@@ -12,12 +12,12 @@ const argvs = parseArgs(process.argv);
 
 export const context: types.globalContext = {
 	affinity: buildSpAffinityUrl(),
-	spParam: decodeBase64(process.env.SP_PARAM).replace(/'/g, ''),
+	spParam: decodeBase64(process.env.SP_PARAM),
 	cpParamsLanguage: argvs.language,
 	cpLanguageCmd: getLanguageCmd(argvs),
 	cpParamsWorkDir: path.isAbsolute(argvs.workDir)
 		? argvs.workDir
-		: path.join(argvs['storage-minio-global-store'], argvs.language), // 非绝对路径，则默认为节点的工作路径下
+		: path.resolve(argvs['storage-minio-global-store'], argvs.language), // 非绝对路径，则默认为节点的工作路径下
 	cpParamsEntry: getLanguageEntry(argvs),
 	userCodePid: null,
 	isFirstKill: true,
@@ -28,5 +28,5 @@ export const context: types.globalContext = {
 	userId: process.env.SP_USER_ID,
 	appId: process.env.SP_APP_ID,
 	nodeId: process.env.SP_NODE_ID,
-	nodePort: 8002,
+	nodePort: 8003,
 };
