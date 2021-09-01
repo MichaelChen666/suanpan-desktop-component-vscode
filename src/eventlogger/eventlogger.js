@@ -152,16 +152,14 @@ class EventLogger {
 			SP_LOGKIT_EVENTS_APPEND,
 			// this.buildEventLog(eventTitle, level),
 			APP_ID,
-			[
-				{
-					title: eventTitle,
-					level: level,
-					time: new Date().toISOString(),
-					data: {
-						node: NODE_ID,
-					},
+			{
+				title: eventTitle,
+				level: level,
+				time: new Date().toISOString(),
+				data: {
+					node: NODE_ID,
 				},
-			],
+			},
 		).catch((error) => console.error(error));
 	}
 
