@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import logger from './eventlogger/eventlogger';
+import path from 'path';
 
 export const suanpan = {
 	affinity: process.env.SP_AFFINITY,
@@ -27,6 +28,29 @@ export function buildSpAffinityUrl() {
 	const port = spPort ? `:${spPort}` : '';
 
 	return `${protocol}://${host}${port}`;
+}
+
+// 非绝对路径，则默认为节点的工作路径下
+export function getWorkDir(argvs: any): string {
+	const defaultWorkDir = path.resolve(
+		argvs['storage-minio-global-store'],
+		argvs.language,
+	);
+
+	try {
+		if (path.isAbsolute(argvs.workDir)) {
+			return argvs.workDir;
+		}
+		console.warn(
+			`params workDir(${argvs.workDir}) is not absolute path, use default workDir(${defaultWorkDir})`,
+		);
+	} catch (err) {
+		console.warn(
+			`parse workDir(${argvs.workDir}) err: ${err}, use default workDir(${defaultWorkDir})`,
+		);
+	}
+
+	return defaultWorkDir;
 }
 
 export function getLanguageCmd(argvs: any): string {
