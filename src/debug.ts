@@ -61,10 +61,11 @@ export function tryOpenVscode(workDir: string, req, resp) {
 	try {
 		// 启动 vscode
 		const child: ChildProcess = spawn('code', ['-n', workDir], {
-			detached: true,
 			cwd: workDir,
+			detached: true,
 			shell: true,
 			windowsHide: true,
+			stdio: 'ignore',
 		});
 
 		if (!child.pid) {

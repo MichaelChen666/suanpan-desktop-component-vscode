@@ -1,7 +1,7 @@
 import { ChildProcess, spawn } from 'child_process';
 import * as global from './global';
 import logger from './eventlogger/eventlogger';
-import { getSpArgsArrary } from './common';
+import { getSpArgsArrary, formatUserCodeProcessStdio } from './common';
 
 export function init(app) {
 	// app.get('/usercode/run', (req, resp) => {
@@ -59,7 +59,7 @@ export function startUserCode() {
 				process.exit(1);
 			}
 		})
-		.on('close', (code) => {
+		.on('exit', (code) => {
 			if (global.context.runMode !== 'edit' && !global.context.isDebugKill) {
 				console.error(
 					`用户组件程序关闭, 退出码（code: ${code}）, 运行模式[${global.context.runMode}]`,
@@ -72,6 +72,14 @@ export function startUserCode() {
 			}
 			global.context.isDebugKill = false;
 		});
+
+	child.stdout?.on('data', (data) => {
+		console.log(formatUserCodeProcessStdio('stdout', data));
+	});
+
+	child.stderr?.on('data', (data) => {
+		console.log(formatUserCodeProcessStdio('stderr', data));
+	});
 
 	if (child.pid) {
 		global.context.userCodePid = child.pid;

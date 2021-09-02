@@ -83,3 +83,7 @@ export function getSpArgsArrary(spParams: string): Array<string> {
 		.split(/\s+/)
 		.map((arg) => arg.trim().replace(/'/g, ''));
 }
+
+export function formatUserCodeProcessStdio(stdio: string, message): string {
+	return `[usercode ${stdio}] ${message}`;
+}
