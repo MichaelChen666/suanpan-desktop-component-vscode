@@ -28,3 +28,8 @@ export const context: types.globalContext = {
 	nodeId: process.env.SP_NODE_ID,
 	nodePort: 8003,
 };
+
+export const runMode = {
+	EditMode: 'edit',
+	RunMode: 'run',
+};

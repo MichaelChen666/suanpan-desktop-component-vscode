@@ -61,7 +61,7 @@ app.get('/', (req, resp) => {
 		console.log(`register port success. port: ${freeport}`);
 		logger.Instance.info(`register port success. port: ${freeport}`);
 		// 启动用户组件程序
-		if (global.context.runMode !== 'edit') {
+		if (global.context.runMode === global.runMode.RunMode) {
 			run.startUserCode();
 		}
 	});

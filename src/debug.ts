@@ -4,6 +4,7 @@ import path from 'path';
 import * as global from './global';
 import { killProcess, getSpArgsArrary } from './common';
 import logger from './eventlogger/eventlogger';
+const fs = require('fs');
 const fse = require('fs-extra');
 
 export function init(app) {
@@ -27,7 +28,10 @@ export function init(app) {
 		const workDir = global.context.cpParamsWorkDir;
 
 		// 杀死已经运行的用户组件程序
-		if (global.context.runMode !== 'edit' && global.context.userCodePid) {
+		if (
+			global.context.runMode === global.runMode.RunMode &&
+			global.context.userCodePid
+		) {
 			logger.Instance.warn(
 				`用户点击调试程序, 主动杀死现有进程, pid: ${global.context.userCodePid}`,
 			);
@@ -52,7 +56,52 @@ export function init(app) {
 	});
 }
 
+// 尽可能为了不覆盖用户已有的有效配置文件
 export function writeJson(filePath: string, launch: vscodeLaunch) {
+	let isFileValid = false;
+	let parsed = null;
+	try {
+		const data = fs.readFileSync(filePath, 'utf-8');
+		try {
+			parsed = JSON.parse(data);
+			if (parsed && typeof parsed === 'object') {
+				if (
+					parsed.version &&
+					parsed.configurations &&
+					typeof parsed.version === 'string' &&
+					Array.isArray(parsed.configurations)
+				) {
+					isFileValid = true;
+					for (let i = 0; i < parsed.configurations.length; i++) {
+						if (
+							parsed.configurations[i].name === launch.configurations[0].name
+						) {
+							parsed.configurations.splice(i, 1);
+							parsed.configurations.splice(i, 1, launch.configurations[0]);
+							const data = JSON.stringify(parsed, null, '\t');
+							fse.outputFileSync(filePath, data);
+							return;
+						}
+					}
+				}
+			}
+		} catch (parsedFailed) {
+			console.warn(`JSON parse err: ${parsedFailed}`);
+		}
+	} catch (err) {
+		console.warn(`read file(${filePath}), err: ${err}`);
+	}
+
+	if (isFileValid) {
+		parsed.configurations.splice(0, 1, launch.configurations[0]);
+		const data = JSON.stringify(parsed, null, '\t');
+		fse.outputFileSync(filePath, data);
+		return;
+	}
+
+	console.warn(
+		`(${filePath}) is not a valid json file, will overwrite the entire file`,
+	);
 	const data = JSON.stringify(launch, null, '\t');
 	return fse.outputFileSync(filePath, data);
 }
