@@ -27,7 +27,7 @@ export function init(app) {
 		const workDir = global.context.cpParamsWorkDir;
 
 		// 杀死已经运行的用户组件程序
-		if (global.context.runMode !== 'debug' && global.context.userCodePid) {
+		if (global.context.runMode !== 'edit' && global.context.userCodePid) {
 			logger.Instance.warn(
 				`用户点击调试程序, 主动杀死现有进程, pid: ${global.context.userCodePid}`,
 			);
