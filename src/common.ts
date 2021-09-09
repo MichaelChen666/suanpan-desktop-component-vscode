@@ -38,7 +38,7 @@ export function getWorkDir(argvs: any): string {
 	);
 
 	try {
-		if (path.isAbsolute(argvs.workDir)) {
+		if (argvs.workDir && path.isAbsolute(argvs.workDir)) {
 			return argvs.workDir;
 		}
 		console.warn(

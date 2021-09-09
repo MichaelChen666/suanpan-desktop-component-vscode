@@ -4,8 +4,7 @@ import path from 'path';
 import * as global from './global';
 import { killProcess, getSpArgsArrary } from './common';
 import logger from './eventlogger/eventlogger';
-const fs = require('fs');
-const fse = require('fs-extra');
+import fse from 'fs-extra';
 
 export function init(app) {
 	// app.get('/usercode/debug/attach', (req, resp) => {
@@ -61,7 +60,7 @@ export function writeJson(filePath: string, launch: vscodeLaunch) {
 	let isFileValid = false;
 	let parsed = null;
 	try {
-		const data = fs.readFileSync(filePath, 'utf-8');
+		const data = fse.readFileSync(filePath, { encoding: 'utf-8' });
 		try {
 			parsed = JSON.parse(data);
 			if (parsed && typeof parsed === 'object') {
