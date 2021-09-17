@@ -1,4 +1,4 @@
-import { ChildProcess, spawn } from 'child_process';
+import { ChildProcess, spawn, exec } from 'child_process';
 import { vscodeLaunch } from './types';
 import path from 'path';
 import * as global from './global';
@@ -51,7 +51,20 @@ export function init(app) {
 			return;
 		}
 
-		tryOpenVscode(workDir, req, resp);
+		exec(`code ${workDir}`, { windowsHide: true }, (err, stdout, stderr) => {
+			if (err) {
+				resp.send({
+					success: false,
+					msg: `open VS Code error!`,
+				});
+				return;
+			}
+			resp.send({
+				success: true,
+			});
+		});
+
+		// tryOpenVscode(workDir, req, resp);
 	});
 }
 
