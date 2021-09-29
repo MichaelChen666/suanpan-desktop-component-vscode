@@ -32,8 +32,13 @@ export function buildSpAffinityUrl() {
 
 // 非绝对路径，则默认为节点的工作路径下
 export function getWorkDir(argvs: any): string {
+	// 客户端版，将./run/..../global替换为minio路径 ./data/minio/suanpan/studio/...../code
+	const bucketName = argvs['storage-minio-bucket-name'];
+	const runPath = normalizedPath('run');
+	const minioPath = normalizedPath(path.join('data', 'minio', `${bucketName}`, 'studio'));
+	argvs['storage-minio-global-store'] = formatRunPath2Minio(argvs['storage-minio-global-store'].replace(`${runPath}`, `${minioPath}`));
 	const defaultWorkDir = path.resolve(
-		argvs['storage-minio-global-store'],
+			argvs['storage-minio-global-store'],
 		argvs.language,
 	);
 
@@ -110,4 +115,13 @@ export function getSpArgsArrary(spParams: string): Array<string> {
 
 export function formatUserCodeProcessStdio(stdio: string, message): string {
 	return `[usercode ${stdio}] ${message}`;
+}
+
+function formatRunPath2Minio(runPath) {
+	let minioPath = path.parse(runPath);
+	minioPath.base = 'code';
+	return path.format(minioPath);
+}
+function normalizedPath(dirPath:string){
+	return `${path.sep}${dirPath}${path.sep}`;
 }
