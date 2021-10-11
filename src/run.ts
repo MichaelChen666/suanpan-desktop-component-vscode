@@ -1,4 +1,5 @@
 import { ChildProcess, spawn } from 'child_process';
+import * as fs from 'fs';
 import * as global from './global';
 import logger from './eventlogger/eventlogger';
 import {
@@ -30,6 +31,14 @@ export function init(app) {
 }
 
 export function startUserCode() {
+	const language = global.context.cpParamsLanguage;
+	if(language === 'python') {
+		const pythonExe = global.context.cpLanguageCmd;
+		if(!fs.existsSync(pythonExe)) {
+			logger.Instance.error(`component python virtual environment was not configured`);
+			return;
+		}
+	}
 	const child: ChildProcess = spawn(
 		global.context.cpLanguageCmd,
 		[`${global.context.cpParamsEntry}`].concat(

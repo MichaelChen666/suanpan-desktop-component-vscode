@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import logger from './eventlogger/eventlogger';
-import path from 'path';
+import * as path from 'path';
 
 export const suanpan = {
 	affinity: process.env.SP_AFFINITY,
@@ -63,7 +63,10 @@ export function getLanguageCmd(argvs: any): string {
 		case 'nodejs':
 			return 'node';
 		case 'python':
-			return 'python';
+			// always using venv pyton executable to run component code
+			// python template built-in config.bat to config venv and user must config venv firstly when click edit or debug
+			const pythonExe = path.resolve("Scripts", "python");
+			return pythonExe;
 		default:
 			return '';
 	}
