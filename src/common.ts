@@ -1,7 +1,6 @@
-import { execSync, spawn } from 'child_process';
+import { execSync } from 'child_process';
 import logger from './eventlogger/eventlogger';
 import * as path from 'path';
-import * as fs from 'fs';
 
 export const suanpan = {
 	affinity: process.env.SP_AFFINITY,
