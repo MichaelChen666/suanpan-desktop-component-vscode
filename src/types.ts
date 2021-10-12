@@ -22,6 +22,7 @@ export type vscodeLaunchAttributes = {
 	request: 'launch' | 'attach';
 	skipFiles?: Array<string>;
 	program?: string;
+	justMyCode?: boolean,
 	processId?: string;
 	args?: Array<string>;
 	env?: { [index: string]: string };
