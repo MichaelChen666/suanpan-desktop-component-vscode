@@ -65,7 +65,7 @@ export function getLanguageCmd(argvs: any): string {
 		case 'python':
 			// always using venv pyton executable to run component code
 			// python template built-in config.bat to config venv and user must config venv firstly when click edit or debug
-			const pythonExe = path.resolve("Scripts", "python");
+			const pythonExe = path.resolve(getWorkDir(argvs), "Scripts", "python.exe");
 			return pythonExe;
 		default:
 			return '';
