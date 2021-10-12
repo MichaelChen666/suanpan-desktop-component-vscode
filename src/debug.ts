@@ -187,6 +187,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 						type: 'python',
 						request: 'launch',
 						gevent: true,
+						justMyCode: false,
 					},
 				],
 			};
