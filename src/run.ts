@@ -2,11 +2,7 @@ import { ChildProcess, spawn } from 'child_process';
 import * as fs from 'fs';
 import * as global from './global';
 import logger from './eventlogger/eventlogger';
-import {
-	killProcess,
-	getSpArgsArrary,
-	formatUserCodeProcessStdio,
-} from './common';
+import { killProcess, getSpArgsArrary } from './common';
 
 export function init(app) {
 	app.get('/usercode/rerun', (req, resp) => {
@@ -32,10 +28,12 @@ export function init(app) {
 
 export function startUserCode() {
 	const language = global.context.cpParamsLanguage;
-	if(language === 'python') {
+	if (language === 'python') {
 		const pythonExe = global.context.cpLanguageCmd;
-		if(!fs.existsSync(pythonExe)) {
-			logger.Instance.error(`component python virtual environment was not configured`);
+		if (!fs.existsSync(pythonExe)) {
+			logger.Instance.error(
+				`component python virtual environment was not configured`,
+			);
 			return;
 		}
 	}
@@ -47,6 +45,7 @@ export function startUserCode() {
 		{
 			cwd: global.context.cpParamsWorkDir,
 			detached: false,
+			stdio: ['ignore', process.stdout, process.stderr],
 		},
 	);
 
@@ -72,13 +71,13 @@ export function startUserCode() {
 			global.context.isDebugKill = false;
 		});
 
-	child.stdout?.on('data', (data) => {
-		console.log(formatUserCodeProcessStdio('stdout', data));
-	});
+	// child.stdout?.on('data', (data) => {
+	// console.log(formatUserCodeProcessStdio('stdout', data));
+	// });
 
-	child.stderr?.on('data', (data) => {
-		console.log(formatUserCodeProcessStdio('stderr', data));
-	});
+	// child.stderr?.on('data', (data) => {
+	// console.log(formatUserCodeProcessStdio('stderr', data));
+	// });
 
 	if (child.pid) {
 		global.context.userCodePid = child.pid;

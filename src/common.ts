@@ -35,10 +35,14 @@ export function getWorkDir(argvs: any): string {
 	// 客户端版，将./run/..../global替换为minio路径 ./data/minio/suanpan/studio/...../code
 	const bucketName = argvs['storage-minio-bucket-name'];
 	const runPath = normalizedPath('run');
-	const minioPath = normalizedPath(path.join('data', 'minio', `${bucketName}`, 'studio'));
-	argvs['storage-minio-global-store'] = formatRunPath2Minio(argvs['storage-minio-global-store'].replace(`${runPath}`, `${minioPath}`));
+	const minioPath = normalizedPath(
+		path.join('data', 'minio', `${bucketName}`, 'studio'),
+	);
+	argvs['storage-minio-global-store'] = formatRunPath2Minio(
+		argvs['storage-minio-global-store'].replace(`${runPath}`, `${minioPath}`),
+	);
 	const defaultWorkDir = path.resolve(
-			argvs['storage-minio-global-store'],
+		argvs['storage-minio-global-store'],
 		argvs.language,
 	);
 
@@ -62,11 +66,16 @@ export function getLanguageCmd(argvs: any): string {
 	switch (argvs.language) {
 		case 'nodejs':
 			return 'node';
-		case 'python':
+		case 'python': {
 			// always using venv pyton executable to run component code
 			// python template built-in config.bat to config venv and user must config venv firstly when click edit or debug
-			const pythonExe = path.resolve(getWorkDir(argvs), "Scripts", "python.exe");
+			const pythonExe = path.resolve(
+				getWorkDir(argvs),
+				'Scripts',
+				'python.exe',
+			);
 			return pythonExe;
+		}
 		default:
 			return '';
 	}
@@ -121,10 +130,10 @@ export function formatUserCodeProcessStdio(stdio: string, message): string {
 }
 
 function formatRunPath2Minio(runPath) {
-	let minioPath = path.parse(runPath);
+	const minioPath = path.parse(runPath);
 	minioPath.base = 'code';
 	return path.format(minioPath);
 }
-function normalizedPath(dirPath:string){
+function normalizedPath(dirPath: string) {
 	return `${path.sep}${dirPath}${path.sep}`;
 }
