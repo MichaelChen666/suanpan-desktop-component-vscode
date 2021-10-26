@@ -37,9 +37,16 @@ export function startUserCode() {
 			return;
 		}
 	}
+
+	const cmdEntry = global.context.cpParamsEntry;
+
+  /*
+	  use space split entry but ignore space in quote
+	*/
+	const args = cmdEntry.split(/(?:[^\s"']+|['"][^'"]*["'])+/g);
 	const child: ChildProcess = spawn(
 		global.context.cpLanguageCmd,
-		[`${global.context.cpParamsEntry}`].concat(
+		args.concat(
 			getSpArgsArrary(global.context.spParam),
 		),
 		{
