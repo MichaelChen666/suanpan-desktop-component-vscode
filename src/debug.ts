@@ -152,7 +152,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 				version: '0.2.0',
 				configurations: [
 					{
-						name: `sp-debug-${global.context.cpLanguageCmd}-launch`,
+						name: `sp-debug-node-launch`,
 						type: 'node',
 						skipFiles: [
 							'<node_internals>/**',
@@ -183,7 +183,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
 				version: '0.2.0',
 				configurations: [
 					{
-						name: `sp-debug-${global.context.cpLanguageCmd}-launch`,
+						name: `sp-debug-python-launch`,
 						type: 'python',
 						request: 'launch',
 						gevent: true,
