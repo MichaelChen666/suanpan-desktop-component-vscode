@@ -72,7 +72,7 @@ export function getLanguageCmd(argvs: any): string {
 				if(jarPath){
 					// exec jar with entry path
 					logger.Instance.debug(`start run jar with ${jarPath}`);
-					return `java -jar ./${jarPath}`;
+					return `java -jar ${jarPath}`;
 				}
 				logger.Instance.debug('start run package cmd ');
 				// build jar if necessary
@@ -101,7 +101,7 @@ export function getLanguageCmd(argvs: any): string {
 export function getLanguageEntry(argvs: any): string {
 	switch (argvs.language) {
 		case 'java':
-			return argvs.entryJava || '';
+			return argvs.entryJava || null;
 		case 'nodejs':
 			return argvs.entryNodejs || 'index.js';
 		case 'python':
