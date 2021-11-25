@@ -147,6 +147,32 @@ export function tryOpenVscode(workDir: string, req, resp) {
 
 export function createLaunchJson(debugType: string): vscodeLaunch {
 	switch (global.context.cpParamsLanguage) {
+		case 'java': {
+			const launch: vscodeLaunch = {
+				version: '0.2.0',
+				configurations: [
+					{
+						name: `sp-debug-java-launch`,
+						type: 'java',
+						request: 'launch',
+					},
+				],
+			};
+
+			if (debugType === 'attach') {
+				launch.configurations[0].request = 'attach';
+				// launch.configurations[0].processId = String(global.context.userCodePid), // 直接设置好已经启动的用户进程（组件）,但是该方式有效的前提是：用户进程启动时必须不能是debug模式启动的, 若是debug模式启动的,则只需要配置另一个选项即可，port，但是该程序并无法获知该端口信息
+				// eslint-disable-next-line no-template-curly-in-string
+				launch.configurations[0].processId = '${command:PickProcess}'; // 用户调试时一开始弹出进程选择器列表, 让用户自己选择调试对象，不过该方式原理同上。两者的区别是上者是直接指定了调试对象，而下者是让用自己选。
+			} else {
+				launch.configurations[0].program = global.context.cpParamsEntry;
+				launch.configurations[0].env = process.env;
+				launch.configurations[0].args = getSpArgsArrary(global.context.spParam);
+			}
+
+			return launch;
+		}
+
 		case 'nodejs': {
 			const launch: vscodeLaunch = {
 				version: '0.2.0',

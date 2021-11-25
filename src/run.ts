@@ -37,19 +37,21 @@ export function startUserCode() {
 			return;
 		}
 	}
-  /*
-	  use space split entry but ignore space in quote
+	const runCmd = global.context.cpLanguageCmd;
+	console.debug(`runCmd:${runCmd}`);
+	/*
+		use space split entry but ignore space in quote
 	*/
 	const cmdEntry = global.context.cpParamsEntry;
-	const args = cmdEntry.split(/(?:[^\s"']+|['"][^'"]*["'])+/g);
+	// const args = cmdEntry.split(/(?:[^\s"']+|['"][^'"]*["'])+/g);
 	const child: ChildProcess = spawn(
-		global.context.cpLanguageCmd,
-		args.concat(
-			getSpArgsArrary(global.context.spParam),
-		),
+		runCmd,
+		[cmdEntry].concat(getSpArgsArrary(global.context.spParam)),
 		{
 			cwd: global.context.cpParamsWorkDir,
 			detached: false,
+			shell: true,
+			windowsHide: true,
 			stdio: ['ignore', process.stdout, process.stderr],
 		},
 	);

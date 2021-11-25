@@ -1,6 +1,8 @@
 import { execSync } from 'child_process';
 import logger from './eventlogger/eventlogger';
 import * as path from 'path';
+import { argvs, runMode } from './global';
+import * as fs from 'fs';
 
 export const suanpan = {
 	affinity: process.env.SP_AFFINITY,
@@ -64,6 +66,21 @@ export function getWorkDir(argvs: any): string {
 
 export function getLanguageCmd(argvs: any): string {
 	switch (argvs.language) {
+		case 'java':
+			if (argvs.runMode === 'run') {
+				const jarPath=getLanguageEntry(argvs);
+				if(jarPath){
+					// exec jar with entry path
+					logger.Instance.debug(`start run jar with ${jarPath}`);
+					return `java -jar ./${jarPath}`;
+				}
+				logger.Instance.debug('start run package cmd ');
+				// build jar if necessary
+				return getPkgJarCmd();
+			}
+			logger.Instance.debug('start run in debug mode');
+			// mvn run in debug mode
+			return 'mvn spring-boot:run';
 		case 'nodejs':
 			return 'node';
 		case 'python': {
@@ -83,6 +100,8 @@ export function getLanguageCmd(argvs: any): string {
 
 export function getLanguageEntry(argvs: any): string {
 	switch (argvs.language) {
+		case 'java':
+			return argvs.entryJava || '';
 		case 'nodejs':
 			return argvs.entryNodejs || 'index.js';
 		case 'python':
@@ -98,6 +117,8 @@ export function decodeBase64(base64str: string) {
 
 export function getLauncType(language: string): string {
 	switch (language) {
+		case 'java':
+			return 'java';
 		case 'nodejs':
 			return 'node';
 		case 'python':
@@ -136,4 +157,11 @@ function formatRunPath2Minio(runPath) {
 }
 function normalizedPath(dirPath: string) {
 	return `${path.sep}${dirPath}${path.sep}`;
+}
+
+export function getPkgJarCmd(): string {
+	const pkgCmd = fs.readFileSync(path.join(getWorkDir(argvs), 'run.sh'), {
+		encoding: 'utf-8',
+	});
+	return pkgCmd;
 }

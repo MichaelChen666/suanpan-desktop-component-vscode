@@ -8,7 +8,7 @@ import {
 } from './common';
 import * as types from './types';
 
-const argvs = parseArgs(process.argv);
+export const argvs = parseArgs(process.argv);
 
 export const context: types.globalContext = {
 	affinity: buildSpAffinityUrl(),
