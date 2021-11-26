@@ -68,8 +68,8 @@ export function getLanguageCmd(argvs: any): string {
 	switch (argvs.language) {
 		case 'java':
 			if (argvs.runMode === 'run') {
-				const jarPath=getLanguageEntry(argvs);
-				if(jarPath){
+				const jarPath = getLanguageEntry(argvs);
+				if (jarPath && fs.existsSync(jarPath)) {
 					// exec jar with entry path
 					logger.Instance.debug(`start run jar with ${jarPath}`);
 					return `java -jar ${jarPath}`;
