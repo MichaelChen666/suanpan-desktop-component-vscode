@@ -155,9 +155,9 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
             name: `sp-debug-dotnet-launch`,
             type: 'coreclr',
             request: 'launch',
-            //net5.0可以通过读取csproj文件中的TargetFramework
-            //sp-component可以读取csproj中的AssemblyName或者文件名
-            program: '${workspaceFolder}/bin/Debug/net5.0/sp-component.dll'
+            // net5.0可以通过读取csproj文件中的TargetFramework
+            // sp-component可以读取csproj中的AssemblyName或者文件名
+            program: '${workspaceFolder}/bin/Debug/net5.0/sp-dotnet.dll',
           },
         ],
       };
@@ -168,7 +168,7 @@ export function createLaunchJson(debugType: string): vscodeLaunch {
         // eslint-disable-next-line no-template-curly-in-string
         launch.configurations[0].processId = '${command:PickProcess}'; // 用户调试时一开始弹出进程选择器列表, 让用户自己选择调试对象，不过该方式原理同上。两者的区别是上者是直接指定了调试对象，而下者是让用自己选。
       } else {
-        launch.configurations[0].program = global.context.cpParamsEntry;
+        // launch.configurations[0].program = global.context.cpParamsEntry;
         launch.configurations[0].env = process.env;
         launch.configurations[0].args = getSpArgsArrary(global.context.spParam);
       }
