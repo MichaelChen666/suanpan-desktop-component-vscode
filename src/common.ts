@@ -68,7 +68,7 @@ export function getLanguageCmd(argvs: any): string {
   switch (argvs.language) {
     case 'dotnet':
       if (argvs.runMode === 'edit') {
-        //hot reload
+        // hot reload
         return 'run watch -- ';
       }
 
@@ -107,6 +107,8 @@ export function getLanguageCmd(argvs: any): string {
 
 export function getLanguageEntry(argvs: any): string {
   switch (argvs.language) {
+    case 'dotnet':
+      return argvs.entryDotnet || 'bin/Debug/net5.0/sp-dotnet.dll';
     case 'java':
       return argvs.entryJava || null;
     case 'nodejs':
