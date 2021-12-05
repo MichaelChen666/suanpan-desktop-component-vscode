@@ -88,8 +88,9 @@ export function writeJson(filePath: string, launch: vscodeLaunch) {
             if (
               parsed.configurations[i].name === launch.configurations[0].name
             ) {
-              parsed.configurations.splice(i, 1);
-              parsed.configurations.splice(i, 1, launch.configurations[0]);
+              const parsedConfig = parsed.configurations.splice(i, 1);
+              // parsed.configurations.splice(i, 1, launch.configurations[0]);
+              Object.assign(parsedConfig, launch.configurations[0]);
               const data = JSON.stringify(parsed, null, '\t');
               fse.outputFileSync(filePath, data);
               return;
