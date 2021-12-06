@@ -67,11 +67,6 @@ export function getWorkDir(argvs: any): string {
 export function getLanguageCmd(argvs: any): string {
   switch (argvs.language) {
     case 'dotnet':
-      if (argvs.runMode === 'edit') {
-        // hot reload
-        return 'run watch -- ';
-      }
-
       return 'run -- ';
     case 'java':
       if (argvs.runMode === 'run') {
@@ -108,7 +103,7 @@ export function getLanguageCmd(argvs: any): string {
 export function getLanguageEntry(argvs: any): string {
   switch (argvs.language) {
     case 'dotnet':
-      return argvs.entryDotnet || 'bin/Debug/net5.0/sp-dotnet.dll';
+      return argvs.entryDotnetDebug || null;
     case 'java':
       return argvs.entryJava || null;
     case 'nodejs':

@@ -98,6 +98,7 @@ export function writeJson(filePath: string, launch: vscodeLaunch) {
         }
       }
     } catch (parsedFailed) {
+      // 如果json文件中带注释，这里会抛异常，需要注意
       console.warn(`JSON parse err: ${parsedFailed}`);
     }
   } catch (err) {
