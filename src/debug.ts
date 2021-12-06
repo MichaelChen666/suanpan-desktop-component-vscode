@@ -5,7 +5,6 @@ import * as global from './global';
 import { killProcess, getSpArgsArrary } from './common';
 import logger from './eventlogger/eventlogger';
 import fse from 'fs-extra';
-import { Console } from 'console';
 
 export function init(app) {
   // app.get('/usercode/debug/attach', (req, resp) => {
