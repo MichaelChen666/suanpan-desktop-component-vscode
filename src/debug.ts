@@ -147,6 +147,30 @@ export function tryOpenVscode(workDir: string, req, resp) {
 
 export function createLaunchJson(debugType: string): vscodeLaunch {
   switch (global.context.cpParamsLanguage) {
+    case 'go': {
+      const launch: vscodeLaunch = {
+        version: '0.2.0',
+        configurations: [
+          {
+            name: `sp-debug-go-launch`,
+            type: 'go',
+            request: 'launch',
+          },
+        ],
+      };
+
+      if (debugType === 'attach') {
+        launch.configurations[0].request = 'attach';
+        // eslint-disable-next-line no-template-curly-in-string
+        launch.configurations[0].processId = '${command:PickProcess}'; // 用户调试时一开始弹出进程选择器列表, 让用户自己选择调试对象，不过该方式原理同上。两者的区别是上者是直接指定了调试对象，而下者是让用自己选。
+      } else {
+        launch.configurations[0].program = global.context.cpParamsEntry;
+        launch.configurations[0].env = process.env;
+        launch.configurations[0].args = getSpArgsArrary(global.context.spParam);
+      }
+
+      return launch;
+    }
     case 'dotnet': {
       const launch: vscodeLaunch = {
         version: '0.2.0',
