@@ -66,6 +66,8 @@ export function getWorkDir(argvs: any): string {
 
 export function getLanguageCmd(argvs: any): string {
   switch (argvs.language) {
+    case 'go':
+      return 'go run'
     case 'dotnet':
       return 'run -- ';
     case 'java':
@@ -102,6 +104,8 @@ export function getLanguageCmd(argvs: any): string {
 
 export function getLanguageEntry(argvs: any): string {
   switch (argvs.language) {
+    case 'go':
+      return argvs.entryGo || null;
     case 'dotnet':
       return argvs.entryDotnetDebug || null;
     case 'java':
